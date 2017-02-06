@@ -17,11 +17,12 @@ def split_rows_pis(df, col_name = 'pi_names'):
     Split on ';'
     
     '''
-    s = df[col_name].str.split(';').apply(pd.Series, 1).stack()
+    df_copy = df.copy()
+    s = df_copy[col_name].str.split(';').apply(pd.Series, 1).stack()
     s.index = s.index.droplevel(-1)
     s.name = col_name
-    del df[col_name]
-    return df.join(s)
+    del df_copy[col_name]
+    return df_copy.join(s)
 
 def strip_series(df, col_list, strip = '(contact)'):
     '''
