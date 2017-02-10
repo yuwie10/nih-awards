@@ -10,15 +10,14 @@ def strip_df(df, *args):
         df = df.apply(lambda s: s.str.strip(arg))
     return df
 
-def split_rows_pis(df, col_name = 'pi_names'):
+def split_rows(df, col_name, by):
     '''
     
-    Different PIs are delimited by a ';'.
-    Split on ';'
+    Split rows of a df by a particular delimiter
     
     '''
     df_copy = df.copy()
-    s = df_copy[col_name].str.split(';').apply(pd.Series, 1).stack()
+    s = df_copy[col_name].str.split(by).apply(pd.Series, 1).stack()
     s.index = s.index.droplevel(-1)
     s.name = col_name
     del df_copy[col_name]
