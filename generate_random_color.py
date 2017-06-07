@@ -1,3 +1,5 @@
+###Original script can be found at https://gist.github.com/adewes/5884820
+
 import random
 
 def get_random_color(pastel_factor = 0.5):
