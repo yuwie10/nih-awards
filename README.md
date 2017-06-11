@@ -1,10 +1,10 @@
-# Analysis of NIH grants
+# Predicting amount of funding the NIH awarded research grants
 
 The National Institutes of Health (NIH) awards funds to grants related to public health research, and [comprehensive](https://github.com/yuwie10/nih-awards/blob/master/column-info/grant_col_info_all.csv) [information](https://github.com/yuwie10/nih-awards/blob/master/column-info/app_types.csv) regarding these grants funded by the NIH is publicly available and can be downloaded from [here](https://exporter.nih.gov/ExPORTER_Catalog.aspx). Ultimately we want to determine the likelihood a grant receives a certain amount of money, given the NIH decided to fund the proposal (the NIH is not required to publish data on proposals that are rejected). In today's highly competitive funding environment this information could be relevant to those submitting grant proposals. Our analysis will be limited to R01 grants, which are the major grants that fund research labs. The notebooks containing the full analysis are listed as follows:
 
 1. Downloading and cleaning [grant](download-clean-data.ipynb) and [principal investigator](cleaning-pi-info.ipynb) data
 2. [Scraping](scrape-grant-info.ipynb) grant information 
-3. Initial [exploration](abstracts-EDA.ipynb) of R01 information
+3. Initial [exploration](abstracts-EDA.ipynb) of R01 information. We only have abstract information for grants from 2008 and later and will therefore only analyze grants from these years.
 4. [Analysis](abstracts-clustering-prediction.ipynb) of grant abstract text data and predictive modeling
 
 ## Unsupervised clustering of abstract text
@@ -36,9 +36,20 @@ We can visualize these data using [t-SNE](https://en.wikipedia.org/wiki/T-distri
 
 We can see pretty distinct clusters (although some are broken into multiple clusters), again suggesting our K-Means clustering did a relatively good job separating grants based on abstract text. 
 
-## Predicting funding group based on grant abstract
+## Predicting funding groups based on grant abstracts
 
-For our initial model, we will attempt to predict which funding percentile group a grant falls into based on tf-idf of the abstracts. Although we will lose some information by grouping grants in this manner rather than running a regression, multinomial Naive Bayes classifiers are good default models that can handle high-dimensional text data. The confusion matrix resulting from fitting a mulitnomial Naive Bayes trained on our tf-idf abstract data is shown below:
+Looking at the distribution of funds, we see 
+
+For our initial model, we will attempt to predict which funding percentile group a grant falls into based on tf-idf of the abstracts. Grants will be divided into funding groups as follows:
+
+1. low: 
+2. med-low:
+3. med-high:
+4. high:
+
+Although we will lose some information by grouping grants in this manner rather than running a regression, we want to make predictions based on grant abstracts and multinomial Naive Bayes classifiers are good default models that can handle high-dimensional text data. 
+
+The confusion matrix resulting from fitting a mulitnomial Naive Bayes trained on our tf-idf abstract data is shown below:
 
 ![alt text](images/4-nb-confusion.png)
 
