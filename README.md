@@ -1,10 +1,13 @@
 # Analysis of NIH grants
 
-The National Institutes of Health (NIH) awards funds to grants related to public health research, and [comprehensive](https://github.com/yuwie10/nih-awards/blob/master/column-info/grant_col_info_all.csv) [information](https://github.com/yuwie10/nih-awards/blob/master/column-info/app_types.csv) regarding these grants funded by the NIH is publicly available and can be downloaded from [here](https://exporter.nih.gov/ExPORTER_Catalog.aspx). Ultimately we want to determine the likelihood a grant receives a certain amount of money, given the NIH decided to fund the proposal (the NIH is not required to publish data on proposals that are rejected). In today's highly competitive funding environment this information could be relevant to those submitting grant proposals. Our analysis will be limited to R01 grants, which are the major grants that fund research labs. All notebooks used in the analysis can be found in this repository.
+The National Institutes of Health (NIH) awards funds to grants related to public health research, and [comprehensive](https://github.com/yuwie10/nih-awards/blob/master/column-info/grant_col_info_all.csv) [information](https://github.com/yuwie10/nih-awards/blob/master/column-info/app_types.csv) regarding these grants funded by the NIH is publicly available and can be downloaded from [here](https://exporter.nih.gov/ExPORTER_Catalog.aspx). Ultimately we want to determine the likelihood a grant receives a certain amount of money, given the NIH decided to fund the proposal (the NIH is not required to publish data on proposals that are rejected). In today's highly competitive funding environment this information could be relevant to those submitting grant proposals. Our analysis will be limited to R01 grants, which are the major grants that fund research labs. The notebooks containing the full analysis are listed as follows:
 
-Following cleaning of [grant](download-clean-data.ipynb) and [principal investigator](cleaning-pi-info.ipynb) data and initial [exploration](abstracts-EDA.ipynb) of R01 information, we can [analyze](abstracts-clustering-prediction.ipynb) grant abstract text data and perform predictive modeling.
+1. Downloading and cleaning [grant](download-clean-data.ipynb) and [principal investigator](cleaning-pi-info.ipynb) data
+2. [Scraping](scrape-grant-info.ipynb) grant information 
+3. Initial [exploration](abstracts-EDA.ipynb) of R01 information
+4. [Analysis](abstracts-clustering-prediction.ipynb) of grant abstract text data and predictive modeling
 
-## Unsupervised clustering
+## Unsupervised clustering of abstract text
 
 First we performed unsupervised clustering of term-frequency inverse-document frequency ([tf-idf](https://en.wikipedia.org/wiki/Tf–idf)) vectorized abstract text via K-means. To determine the number of clusters to fit, we can plot the sum of squared errors vs. the number of clusters, commonly known as an elbow plot.
 
