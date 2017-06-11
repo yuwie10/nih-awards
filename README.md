@@ -1,4 +1,4 @@
-# Predicting amount of funding the NIH awarded research grants
+# Predicting amount of funding the NIH awarded research grants (R01s)
 
 The National Institutes of Health (NIH) awards funds to grants related to public health research, and [comprehensive](https://github.com/yuwie10/nih-awards/blob/master/column-info/grant_col_info_all.csv) [information](https://github.com/yuwie10/nih-awards/blob/master/column-info/app_types.csv) regarding these grants funded by the NIH is publicly available and can be downloaded from [here](https://exporter.nih.gov/ExPORTER_Catalog.aspx). Ultimately we want to determine the likelihood a grant receives a certain amount of money, given the NIH decided to fund the proposal (the NIH is not required to publish data on proposals that are rejected). In today's highly competitive funding environment this information could be relevant to those submitting grant proposals. Our analysis will be limited to R01 grants, which are the major grants that fund research labs. The notebooks containing the full analysis are listed as follows:
 
@@ -9,7 +9,7 @@ The National Institutes of Health (NIH) awards funds to grants related to public
 
 ## Unsupervised clustering of abstract text
 
-First we performed unsupervised clustering of term-frequency inverse-document frequency ([tf-idf](https://en.wikipedia.org/wiki/Tf–idf)) vectorized abstract text via K-means. To determine the number of clusters to fit, we can plot the sum of squared errors vs. the number of clusters, commonly known as an elbow plot.
+Term frequency-inverse document frequency ([tf-idf](https://en.wikipedia.org/wiki/Tf%E2%80%93idf)) is a common method of assessing the importance of a word in a document corpus. It weights the frequency of a given term in an individual document with the inverse frequency of that term in the entire corpus. The general idea is that a term that appears in all the documents is unlikely to be useful for identifying individual documents/subjects and is therefore unimportant. A term that appears frequently in a small number of documents, however, is likely very important in distinguishing those documents. We will use tf-idf vectorization to transform our abstract text and perform K-means clustering. To determine the number of clusters to fit, we can plot the sum of squared errors vs. the number of clusters, commonly known as an elbow plot.
 
 ![alt text](images/1-elbow-plot.png)
 
@@ -38,16 +38,22 @@ We can see pretty distinct clusters (although some are broken into multiple clus
 
 ## Predicting funding groups based on grant abstracts
 
-Looking at the distribution of funds, we see 
+We will first plot the distribution of funds awarded to grants in our dataset.
 
-For our initial model, we will attempt to predict which funding percentile group a grant falls into based on tf-idf of the abstracts. Grants will be divided into funding groups as follows:
+![alt text](images/distri-funds.png)
 
-1. low: 
-2. med-low:
-3. med-high:
-4. high:
+Other than a small number of outliers, the majority of grants received less than $1,000,000. Let's re-plot the distribution of funds for grants that received less than $1,000,000.
 
-Although we will lose some information by grouping grants in this manner rather than running a regression, we want to make predictions based on grant abstracts and multinomial Naive Bayes classifiers are good default models that can handle high-dimensional text data. 
+![alt text](images/dist-funds-2.png)
+
+We see that most grants receive similar amounts of funding. For our first model, we will attempt to predict which funding group, based on percentiles, a grant falls into based on tf-idf of the abstracts. Grants will be divided into funding groups as follows:
+
+1. low: grants awarded less than $319,102.5 (<25th percentile)
+2. med-low: grants awarded $319,102.5-$371,250 (25th-50th percentile)
+3. med-high: grants awarded $371,250-$464,929.5 (50th-75th percentile)
+4. high: grants awarded more than $464,929.5 (>75th percentile)
+
+Dividing the grants in this manner ensures each class has the same number of observations, ensuring we will not have to worry about class imbalance. Although we will lose some information by grouping grants in this manner rather than running a regression, we want to make predictions based on grant abstracts and multinomial Naive Bayes classifiers are good default models that can handle high-dimensional text data. Furthermore, because most grant funds are clustered together, we will not lose too much information.
 
 The confusion matrix resulting from fitting a mulitnomial Naive Bayes trained on our tf-idf abstract data is shown below:
 
@@ -57,7 +63,7 @@ Given that this is a naive model trained only on abstract text data, our predict
 
 ## Regression analysis of grant data
 
-We will use the following features:
+We will now predict funding amount using regression analysis and will use the following features:
 * **Distance:** Due to dimensionality concerns we will not directly use our tf-idf matrix to perform regression analysis. Instead, we will use the distance of each grant from the center of the 20 clusters identified by K-Means. 
 * **Application type:** The [type](https://github.com/yuwie10/nih-awards/blob/master/column-info/app_types.csv) of grant application (new, renewal, etc.)
 * **Funding year** 
@@ -70,7 +76,7 @@ First we fit a random forest regressor to predict funds based on the features li
 
 ![alt text](images/5-rf-confusion.png)
 
-The random forest trained on the listed features performs better than the Naive Bayes trained on text data. We can also look at the features the random forest used to split the data to make predictions.
+The random forest trained on the listed features performs better than the Naive Bayes trained on text data, with a larger number of true positives and fewer false positives across all classes. We can also look at the features the random forest used to split the data to make predictions.
 
 ![alt text](images/6-rf-features.png)
 
@@ -78,7 +84,7 @@ We can see the most important feature the random forest model used for splits wa
 
 ## Conclusions
 
-Although the abstract alone can lead to better than random predictions of how many funds a grant was awarded, combining abstract information with other data about the grant results in relatively good predictive power. Our final model was a random forest trained on these data. Although we can determine which features random forests used to split the data, and therefore which variables were deemed important, it is more difficult to determine how the feature corresponds to our response. We do know that the study section the grant was assigned to as well as the associated organization seem to have a large effect on ultimately how many funds the grant is awarded.
+Although the abstract alone can lead to better than random predictions of how many funds a grant was awarded, combining abstract information with other data about the grant results in relatively good predictive power. Our final model was a random forest trained on these data. Although we can determine which features random forests used to split the data, and therefore which variables were deemed important, it is more difficult to determine how the feature corresponds to our response. We do know that the study section the grant was assigned to as well as the associated organization seem to have a large effect on ultimately how many funds the grant is awarded. Furthermore, whether the grant was assigned to research topics such as genetics and genomics and child obesity/disease also were important predictors for funding.
 
 Our model is based on only a static snapshot of NIH grants, specifically from grants funded between 2008 and 2016 and would need to be re-trained as more grants are funded. This is particularly true of the unsupervised clustering we performed; in fact, we could possibly get better predictions by fitting more clusters, although the increase in dimensionality may make model training more difficult. 
 
