@@ -55,7 +55,7 @@ We see that most grants receive similar amounts of funding. For our first model,
 3. med-high: grants awarded $371,250-$464,929.5 (50th-75th percentile)
 4. high: grants awarded more than $464,929.5 (>75th percentile)
 
-Dividing the grants in this manner ensures each class has the same number of observations, ensuring we will not have to worry about class imbalance. Although we will lose some information by grouping grants in this manner rather than running a regression, we want to make predictions based on grant abstracts and multinomial Naive Bayes classifiers are good default models that can handle high-dimensional text data. Furthermore, because most grant funds are clustered together, we will not lose too much information.
+Dividing the grants in this manner ensures each class has the same number of observations and thus we will not have to worry about class imbalance. Although we will lose some information by grouping grants in this manner rather than running a regression, we want to make predictions based on grant abstracts and multinomial Naive Bayes classifiers are good default models that can handle high-dimensional text data. Furthermore, because most grant funds are clustered together, we will not lose too much information.
 
 The confusion matrix resulting from fitting a mulitnomial Naive Bayes trained on our tf-idf abstract data is shown below:
 
