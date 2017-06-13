@@ -1,6 +1,6 @@
 # Predicting amount of funding the NIH awarded research grants (R01s)
 
-The National Institutes of Health (NIH) awards funds to grants related to public health research, and [comprehensive](https://github.com/yuwie10/nih-awards/blob/master/column-info/grant_col_info_all.csv) [information](https://github.com/yuwie10/nih-awards/blob/master/column-info/app_types.csv) regarding these grants funded by the NIH is publicly available and can be downloaded from [here](https://exporter.nih.gov/ExPORTER_Catalog.aspx). Ultimately we want to determine the likelihood a grant receives a certain amount of money, given the NIH decided to fund the proposal (the NIH is not required to publish data on proposals that are rejected). In today's highly competitive funding environment this information could be relevant to those submitting grant proposals. Our analysis will be limited to R01 grants (we will simply refer to them as grants here), which are the major source of funding for most academic research labs. 
+The National Institutes of Health (NIH) awards funds to grants related to public health research, and [comprehensive information](https://github.com/yuwie10/nih-awards/blob/master/column-info/grant_col_info_all.csv) regarding these grants funded by the NIH is publicly available and can be downloaded from [here](https://exporter.nih.gov/ExPORTER_Catalog.aspx). Ultimately we want to determine the likelihood a grant receives a certain amount of money, given the NIH decided to fund the proposal (the NIH is not required to publish data on proposals that are rejected). In today's highly competitive funding environment this information could be relevant to those submitting grant proposals. Our analysis will be limited to R01 grants (we will simply refer to them as grants here), which are the major source of funding for most academic research labs. 
 
 ## Insights regarding which grants receive high or low levels of funding
 
@@ -8,8 +8,8 @@ Based on the analysis of NIH grant data, the following were found to be importan
 
 * Research topic: It is unsurprising that the research topic, as analyzed from grant text data, plays a major role in determining the amount of awarded funds. We identified 20 topics and counted the number of grants in each topic that fell in a funding quartile (see table below; counts were from a test subset of the full dataset). We highlight a few topics associated with high or low funding:
   * Grants associated with *child obesity/diabetes* research were the most common highly funded research topic, with 1635 grants funded in the top 75th quartile compared to 619 in the bottom 25th quartile. 
-  * Although fewer total *HIV grants* were funded compared to child obesity, an HIV proposal is almost 4x as likely to be in the top 75th quartile compared to the bottom 25th quartile (706:192). 
-  * Suprisingly, *cancer research proposals* were almost 2.5x more likely to be funded in the bottom 25th quartile (1119 cancer grants) compared to the upper 75th quartile (459 grants).
+  * Although fewer total *HIV* grants were funded compared to child obesity, an HIV proposal is almost 4x as likely to be in the top 75th quartile compared to the bottom 25th quartile (706:192). 
+  * Suprisingly, *cancer research* proposals were almost 2.5x more likely to be funded in the bottom 25th quartile (1119 cancer grants) compared to the upper 75th quartile (459 grants).
   * Also surprising given the hype around large-scale sequencing, *genetics and genomics* research had more grants funded in the bottom 25th quartile than any other group.
 
 research topic               |  <$319,102.5  |  $319,102.5-$371,250  |  $371,250-$464,929.5  |  >$464,929.5
