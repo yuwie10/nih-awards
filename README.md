@@ -114,7 +114,9 @@ First we fit a random forest regressor to predict funds based on the features li
 
 ![alt text](images/5-rf-confusion.png)
 
-The random forest trained on the listed features performs better than the Naive Bayes trained on text data, with a larger number of true positives and fewer false positives across all classes. We can also look at the features the random forest used to split the data to make predictions.
+The random forest trained on the listed features performs better than the Naive Bayes trained on text data, with a larger number of true positives and fewer false positives across all classes. 
+
+Let's take a look at the features the random forest used to split the data to make predictions.
 
 ![alt text](images/6-rf-features.png)
 
