@@ -6,7 +6,11 @@ The National Institutes of Health (NIH) awards funds to grants related to public
 
 Based on the analysis of NIH grant data, the following were found to be important predictors for total funds awarded to an R01 research grant:
 
-* Research topic: It is unsurprising that the research topic, as analyzed from grant text data, plays a major role in determining the amount of awarded funds. We identified 20 topics and counted the number of grants that fell within a certain funding quartile (counts were from a test subset of the full dataset):
+* Research topic: It is unsurprising that the research topic, as analyzed from grant text data, plays a major role in determining the amount of awarded funds. We identified 20 topics and counted the number of grants in each topic that fell in a funding quartile (see table below; counts were from a test subset of the full dataset). We highlight a few topics associated with high or low funding:
+  * Grants associated with *child obesity/diabetes* research were the most common highly funded research topic, with 1635 grants funded in the top 75th quartile compared to 619 in the bottom 25th quartile. 
+  * Although fewer total *HIV grants* were funded compared to child obesity, an HIV proposal is almost 4x as likely to be in the top 75th quartile compared to the bottom 25th quartile (706:192). 
+  * Suprisingly, *cancer research proposals* were almost 2.5x more likely to be funded in the bottom 25th quartile (1119 cancer grants) compared to the upper 75th quartile (459 grants).
+  * Also surprising given the hype around large-scale sequencing, *genetics and genomics* research had more grants funded in the bottom 25th quartile than any other group.
 
 research topic               |  <$319,102.5  |  $319,102.5-$371,250  |  $371,250-$464,929.5  |  >$464,929.5
 -----------------------------|---------------|----------------------|----------------------|-------------
@@ -30,10 +34,9 @@ parasitology (malaria)       |  69           |  97                  |  130      
 sleep/ageing                 |  320          |  237                 |  226                 |  315
 substance abuse/addiction    |  247          |  216                 |  197                 |  469
 virology                     |  266          |  330                 |  491                 |  405
-
-&nbsp;&nbsp; * A few thoughts: We see that grants associated with child obesity/diabetes research were the most common highly funded research topic, with 1635 grants funded in the top 75th percentile compared to 619 in the bottom 25th percentile. Although fewer total HIV grants were funded compared to child obesity, an HIV proposal is almost 4x as likely to be in the top 75th percentile compared to the bottom 25th percentile (706:192). Suprisingly, cancer research proposals were almost 2.5x more likely to be funded in the bottom 25th percentile (1119 cancer grants) compared to the upper 75th percentile (459 grants).
-* Study section: Grants are reviewed and funded by one of 250 different [study sections](https://public.csr.nih.gov/studysections/Standing/Pages/default.aspx), depending on the research topic, and our trained model identified the study section as the most important predictor of funds. For example, almost 4800 grants funded by the NIH's [special emphasis panels](https://public.era.nih.gov/pubroster/#sep) were in the top 75th percentile of funding compared to only ~2500 that were in the bottom 25th percentile of funding. A grant that is reviewed and accepted by one of these panels thus has a very high chance of being funded. 
-* Organization: The organization/institute associated with the grant was also predictive of the proposal's funding percentile; however, given the number of unique organizations (1067), it is difficult to resolve the contribution of any individual organization.
+   
+* Study section: Grants are reviewed and funded by one of 250 different [study sections](https://public.csr.nih.gov/studysections/Standing/Pages/default.aspx), depending on the research topic, and our trained model identified the study section as the most important predictor of funds. For example, almost 4800 grants funded by the NIH's [special emphasis panels](https://public.era.nih.gov/pubroster/#sep) were in the top 75th quartile of funding compared to only ~2500 that were in the bottom 25th quartile of funding. A grant that is reviewed and accepted by one of these panels thus has a very high chance of being funded. 
+* Organization: The organization/institute associated with the grant was also predictive of the proposal's funding quartile; however, given the number of unique organizations (1067), it is difficult to resolve the contribution of any individual organization.
 
 The notebooks containing the full analyses are as follows:
 
@@ -81,12 +84,12 @@ Other than a small number of outliers, the majority of grants received less than
 
 ![alt text](images/dist-funds-2.png)
 
-We see that most grants receive similar amounts of funding. For our first model, we will attempt to predict which funding group, based on percentiles, a grant falls into based on tf-idf of the abstracts. Grants will be divided into funding groups as follows:
+We see that most grants receive similar amounts of funding. For our first model, we will attempt to predict which funding group quartile a grant falls into based on tf-idf of the abstracts. Grants will be divided into funding groups as follows:
 
-1. low: grants awarded less than $319,102.5 (<25th percentile)
-2. med-low: grants awarded $319,102.5-$371,250 (25th-50th percentile)
-3. med-high: grants awarded $371,250-$464,929.5 (50th-75th percentile)
-4. high: grants awarded more than $464,929.5 (>75th percentile)
+1. low: grants awarded less than $319,102.5 (<25th quartile)
+2. med-low: grants awarded $319,102.5-$371,250 (25th-50th quartile)
+3. med-high: grants awarded $371,250-$464,929.5 (50th-75th quartile)
+4. high: grants awarded more than $464,929.5 (>75th quartile)
 
 Dividing the grants in this manner ensures each class has the same number of observations and thus we will not have to worry about class imbalance. Although we will lose some information by grouping grants in this manner rather than running a regression, we want to make predictions based on grant abstracts and multinomial Naive Bayes classifiers are good default models that can handle high-dimensional text data. Furthermore, because most grant funds are clustered together, we will not lose too much information.
 
@@ -123,4 +126,4 @@ Although the abstract alone can lead to better than random predictions of how ma
 
 Our model is based on only a static snapshot of NIH grants, specifically from grants funded between 2008 and 2016 and would need to be re-trained as more grants are funded. This is particularly true of the unsupervised clustering we performed; in fact, we could possibly get better predictions by fitting more clusters, although the increase in dimensionality may make model training more difficult. 
 
-Although grant information is available from as early as 1985, as of 2017/05/09 when the data was downloaded abstracts were only available from 2008 and later. As of 2017/06 it seems the NIH may have updated these earlier grants to include abstracts and to fix DUNS numbers. It would be interesting to investigate these earlier grants and see if grant funding and abstracts have changed over time.
+Although grant information is available from as early as 1985, as of 2017/05/09 when the data was downloaded abstracts were only available from 2008 and later. As of 2017/06 it seems the NIH may have [updated](https://exporter.nih.gov/ExPORTER_Catalog.aspx) these earlier grants to include abstracts and to fix DUNS numbers. It would be interesting to investigate these earlier grants and see if grant funding and abstracts have changed over time.
