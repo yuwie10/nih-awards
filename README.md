@@ -8,7 +8,7 @@ Based on the analysis of NIH grant data, the following were found to be importan
 
 * Research topic: It is unsurprising that the research topic, as analyzed from grant text data, plays a major role in determining the amount of awarded funds. We identified 20 topics and counted the number of grants that fell within a certain funding quartile (counts were from a test subset of the full dataset):
 
-research topic               |  <$319,102.5  |  $319,102.5-371,250  |  $371,250-464,929.5  |  >$464,929.5
+research topic               |  <$319,102.5  |  $319,102.5-$371,250  |  $371,250-$464,929.5  |  >$464,929.5
 -----------------------------|---------------|----------------------|----------------------|-------------
 bacteriology                 |  308          |  300                 |  437                 |  244
 cancer cell biology          |  766          |  829                 |  799                 |  313
